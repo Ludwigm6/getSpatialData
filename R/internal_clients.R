@@ -254,16 +254,20 @@
 #' @importFrom httr POST content stop_for_status warn_for_status content_type
 #' @importFrom utils URLencode
 #' @noRd
+
 .ERS_login <- function(username, password, n_retry = 3){
   x <- POST(url = paste0(getOption("gSD.api")$ee, "login"),
-            body = URLencode(paste0('jsonRequest={"username":"', username, '","password":"', password, '","authType":"EROS","catalogId":"EE"}')),
-            content_type("application/x-www-form-urlencoded; charset=UTF-8"))
+            body = list(username = username, password = password),
+            encode = "json",
+            user_agent("httr"))
   stop_for_status(x, "connect to server.")
   warn_for_status(x)
   v <- content(x)$data
-  if(is.null(v)) out("Login failed. Please retry later or call services() to check if USGS services are currently unavailable.", type = 3)
+  if(is.null(v)) out("Login failed. Please retry later or call services() to check if USGS services are currently
+unavailable.", type = 3)
   return(v)
 }
+
 
 #' logout from ERS with API key
 #'
