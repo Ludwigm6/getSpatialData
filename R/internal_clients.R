@@ -259,7 +259,7 @@
   x <- POST(url = paste0(getOption("gSD.api")$ee, "login"),
             body = list(username = username, password = password),
             encode = "json",
-            user_agent("httr"))
+            httr::user_agent("httr"))
   stop_for_status(x, "connect to server.")
   warn_for_status(x)
   v <- content(x)$data
